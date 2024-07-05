@@ -17,10 +17,11 @@ class FileFactory extends Factory
     public function definition(): array
     {
         $fileName = fake()->name();
+
         return [
             'uuid' => fake()->uuid(),
             'name' => $fileName,
-            'path' => storage_path('pet-shop/' . $fileName),
+            'path' => storage_path('pet-shop/'.$fileName),
             'size' => fake()->numberBetween(),
             'type' => fake()->randomElement(['jpeg', 'jpg', 'png', 'webp', 'gif']),
         ];

@@ -62,6 +62,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'uuid',
         'first_name',
         'last_name',
         'is_admin',
@@ -101,5 +102,10 @@ class User extends Authenticatable
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function tokens()
+    {
+        return $this->hasMany(JwtToken::class);
     }
 }

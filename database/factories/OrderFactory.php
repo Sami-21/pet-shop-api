@@ -28,15 +28,15 @@ class OrderFactory extends Factory
             'order_status_id' => fake()->randomElement($orderStatusIds),
             'payment_id' => null,
             'products' => json_encode([
-                "product" => fake()->uuid(),
-                "quantity" => fake()->numberBetween(
+                'product' => fake()->uuid(),
+                'quantity' => fake()->numberBetween(
                     0,
                     100
-                )
+                ),
             ]),
             'address' => json_encode([
-                "billing" => fake()->address(),
-                "shiping" => fake()->address()
+                'billing' => fake()->address(),
+                'shiping' => fake()->address(),
             ]),
             'delivery_fee' => fake()->randomFloat(2, 0, 100),
             'amount' => fake()->randomFloat(2, 10, 1000),
@@ -44,7 +44,7 @@ class OrderFactory extends Factory
         ];
     }
 
-    public function  configure()
+    public function configure()
     {
         return $this->afterMaking(function (Order $order) {
             $paidStatusId = OrderStatus::where('title', 'paid')->first()->id;

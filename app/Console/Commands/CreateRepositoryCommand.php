@@ -19,7 +19,7 @@ class CreateRepositoryCommand extends Command
         $repositoryNamespace = 'App\Repositories';
         $interfaceNamespace = 'App\Interfaces';
 
-        if (!is_dir($repositoryPath)) {
+        if (! is_dir($repositoryPath)) {
             mkdir($repositoryPath, 0777, true);
             $this->info("Created {$repositoryPath}");
         }
@@ -32,7 +32,7 @@ class CreateRepositoryCommand extends Command
         }
 
         $interfaceFilePath = "{$interfacePath}/{$interfaceName}.php";
-        if (!file_exists($interfaceFilePath)) {
+        if (! file_exists($interfaceFilePath)) {
             $this->error("The interface {$interfaceName} does not exist!");
 
             return;

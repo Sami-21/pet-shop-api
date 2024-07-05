@@ -15,7 +15,7 @@ class CreateInterfaceCommand extends Command
         $name = $this->argument('name');
         $interfacePath = app_path('Interfaces');
 
-        if (!is_dir($interfacePath)) {
+        if (! is_dir($interfacePath)) {
             mkdir($interfacePath, 0777, true);
             $this->info("Created {$interfacePath}");
         }

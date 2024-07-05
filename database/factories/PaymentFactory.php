@@ -30,30 +30,30 @@ class PaymentFactory extends Factory
             switch ($payment->type) {
                 case 'credit_card':
                     $payment->details = json_encode([
-                        "holder_name" => fake()->name(),
-                        "number" => fake()->creditCardNumber(),
-                        "ccv" => fake()->numberBetween(100, 999),
-                        "expire_date" => fake()->creditCardExpirationDateString()
+                        'holder_name' => fake()->name(),
+                        'number' => fake()->creditCardNumber(),
+                        'ccv' => fake()->numberBetween(100, 999),
+                        'expire_date' => fake()->creditCardExpirationDateString(),
                     ]);
 
                     break;
                 case 'cash_on_delivery':
                     $payment->details = json_encode([
-                        "first_name" => fake()->firstName(),
-                        "last_name" => fake()->lastName(),
-                        "address" => fake()->address()
+                        'first_name' => fake()->firstName(),
+                        'last_name' => fake()->lastName(),
+                        'address' => fake()->address(),
                     ]);
                     break;
                 case 'bank_transfer':
                     $payment->details = json_encode([
-                        "swift" => fake()->swiftBicNumber(),
-                        "iban" => fake()->iban(),
-                        "name" => fake()->name()
+                        'swift' => fake()->swiftBicNumber(),
+                        'iban' => fake()->iban(),
+                        'name' => fake()->name(),
                     ]);
                     break;
 
                 default:
-                    # code...
+                    // code...
                     break;
             }
             $payment->save();

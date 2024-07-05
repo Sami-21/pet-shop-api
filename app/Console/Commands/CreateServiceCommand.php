@@ -19,7 +19,7 @@ class CreateServiceCommand extends Command
         $serviceNamespace = 'App\Services';
         $repositoryNamespace = 'App\Repositories';
 
-        if (!is_dir($servicePath)) {
+        if (! is_dir($servicePath)) {
             mkdir($servicePath, 0777, true);
             $this->info("Created {$servicePath}");
         }
@@ -32,7 +32,7 @@ class CreateServiceCommand extends Command
         }
 
         $repositoryFilePath = "{$repositoryPath}/{$repositoryName}.php";
-        if (!file_exists($repositoryFilePath)) {
+        if (! file_exists($repositoryFilePath)) {
             $this->error("The repository {$repositoryName} does not exist!");
 
             return;
