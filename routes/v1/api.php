@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\v1\BrandController;
+use App\Http\Controllers\Api\v1\CategoryController;
+use App\Http\Controllers\Api\v1\ProductController;
 use App\Http\Controllers\Api\v1\UserController;
-use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Services\SwaggerService;
 
@@ -31,6 +32,14 @@ Route::prefix('/v1')->group(function () {
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/category/{uuid}', [CategoryController::class, 'show']);
     Route::controller(CategoryController::class)->prefix('category')->middleware(['auth.jwt', 'is.admin'])->group(function () {
+        Route::post('/create', 'store');
+        Route::put('/{uuid}', 'update');
+        Route::delete('/{uuid}', 'destroy');
+    });
+
+    Route::get('/products', [ProductController::class, 'index']);
+    Route::get('/product/{uuid}', [ProductController::class, 'show']);
+    Route::controller(ProductController::class)->prefix('product')->middleware(['auth.jwt', 'is.admin'])->group(function () {
         Route::post('/create', 'store');
         Route::put('/{uuid}', 'update');
         Route::delete('/{uuid}', 'destroy');

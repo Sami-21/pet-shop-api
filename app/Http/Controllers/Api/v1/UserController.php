@@ -272,7 +272,7 @@ class UserController extends Controller
         return $this->createJsonResponse($response['success'], $response['data']);
     }
 
-    private function createJsonResponse(int $success = 0, array $data = [], ?string $error = '', array $errors = [], $extra = [], $status = 200): JsonResponse
+    private function createJsonResponse(int $success = 0, array $data = [], ?string $error = '', array $errors = [], $extra = []): JsonResponse
     {
         return response()->json([
             'success' => $success,
@@ -280,6 +280,6 @@ class UserController extends Controller
             'error' => $error,
             'errors' => $errors,
             'extra' => $extra,
-        ], $status);
+        ]);
     }
 }

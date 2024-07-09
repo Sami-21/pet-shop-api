@@ -23,11 +23,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function getUserOrders(User $user, int $limit, string $sortBy, bool $descFilter)
     {
-        if ($descFilter) {
-            return $user->orders()->orderBy($sortBy, 'desc')->paginate($limit);
-        } else {
-            return $user->orders()->orderBy($sortBy, 'asc')->paginate($limit);
-        }
+        return $user->orders()->orderBy($sortBy, $descFilter ? 'desc' : 'asc')->paginate($limit);
     }
 
     public function destroyUser(User $user): void

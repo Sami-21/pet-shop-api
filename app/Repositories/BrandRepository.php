@@ -10,11 +10,7 @@ class BrandRepository implements BrandRepositoryInterface
 {
     public function getBrands(int $limit, string $sortBy, bool $descFilter)
     {
-        if ($descFilter) {
-            return Brand::orderBy($sortBy, 'desc')->paginate($limit);
-        } else {
-            return Brand::orderBy($sortBy, 'asc')->paginate($limit);
-        }
+        return Brand::orderBy($sortBy,  $descFilter ? 'desc' : 'asc')->paginate($limit);
     }
 
     public function getBrand(string $uuid)

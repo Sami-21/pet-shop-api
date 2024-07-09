@@ -10,11 +10,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 {
   public function getCategories(int $limit, string $sortBy, bool $descFilter)
   {
-    if ($descFilter) {
-      return Category::orderBy($sortBy, 'desc')->paginate($limit);
-    } else {
-      return Category::orderBy($sortBy, 'asc')->paginate($limit);
-    }
+    return Category::orderBy($sortBy,  $descFilter ? 'desc' : 'asc')->paginate($limit);
   }
 
   public function getCategory(string $uuid)
