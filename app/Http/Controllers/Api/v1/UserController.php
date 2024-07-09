@@ -10,13 +10,7 @@ use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-/**
- * @OA\Info(
- *     title="Pet Shop API",
- *     version="1.0",
- *     description="Documentation for v1 api of pet store , this API is a recruitement test from Buckhill.",
- * )
- */
+
 class UserController extends Controller
 {
     protected UserService $userService;
@@ -30,8 +24,34 @@ class UserController extends Controller
      * @OA\Get(
      *     path="/api/v1/user",
      *     summary="View user account",
+     *      tags={"Users"},
+     * 
      *
-     *     @OA\Response(response="200", description="Ok"),
+     *     @OA\Response(response="200", description="Ok",
+     *
+     *     @OA\JsonContent(
+     *             type="object",
+     *
+     *             @OA\Property(property="success", type="int", example=1),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdCIsInN1YiI........."),
+     *             ),
+     *             @OA\Property(property="error", type="string|null", example=null),
+     *             @OA\Property(property="errors", type="array",
+     *
+     *                     @OA\Items(
+     *                     type="object",
+     *                 )),
+     *
+     *             @OA\Property(property="extra", type="array",
+     *
+     *                     @OA\Items(
+     *                     type="object",
+     *                 )),
+     *         )),
+     *
      *     @OA\Response(response="401", description="Unauthenticated"),
      *     @OA\Response(response="403", description="Unauthorized"),
      *     @OA\Response(response="404", description="Not found"),
@@ -51,6 +71,8 @@ class UserController extends Controller
      * @OA\Delete(
      *     path="/api/v1/user",
      *     summary="Delete user account",
+     *      tags={"Users"},
+     * 
      *
      *     @OA\Response(response="200", description="Ok"),
      *     @OA\Response(response="401", description="Unauthenticated"),
@@ -70,6 +92,8 @@ class UserController extends Controller
      * @OA\Get(
      *     path="/api/v1/user/orders",
      *     summary="List all orders for the authenticated user",
+     *      tags={"Users"},
+     * 
      *
      *     @OA\Response(response="200", description="Ok"),
      *     @OA\Response(response="401", description="Unauthenticated"),
@@ -93,6 +117,8 @@ class UserController extends Controller
      * @OA\Post(
      *     path="/api/v1/user/create",
      *     summary="Create new user account",
+     *      tags={"Users"},
+     * 
      *
      *     @OA\Response(
      *         response="200",
@@ -113,6 +139,8 @@ class UserController extends Controller
      * @OA\Post(
      *     path="/api/v1/user/forgot-password",
      *     summary="Create a token to reset user password",
+     *      tags={"Users"},
+     * 
      *
      *     @OA\Response(
      *         response="200",
@@ -125,12 +153,16 @@ class UserController extends Controller
      *     @OA\Response(response="500", description="Internal server error"),
      * )
      */
-    public function forgetPassword(Request $request): void {}
+    public function forgetPassword(Request $request): void
+    {
+    }
 
     /**
      * @OA\Post(
      *     path="/api/v1/user/login",
      *     summary="Login to his account",
+     *      tags={"Users"},
+     * 
      *
      *     @OA\Response(
      *         response="200",
@@ -170,13 +202,15 @@ class UserController extends Controller
         $credentials = $request->only(['email', 'password']);
         $response = $this->userService->login($credentials);
 
-        return $this->createJsonResponse($response['success'], $response['data']);
+        return $this->createJsonResponse($response['success'], $response['data'], $response['error']);
     }
 
     /**
      * @OA\Get(
      *     path="/api/v1/user/logout",
      *     summary="Logout user",
+     *      tags={"Users"},
+     * 
      *
      *     @OA\Response(
      *         response="200",
@@ -198,6 +232,8 @@ class UserController extends Controller
      * @OA\Post(
      *     path="/api/v1/user/reset-password-token",
      *     summary="Reset user password with token",
+     *      tags={"Users"},
+     * 
      *
      *     @OA\Response(
      *         response="200",
@@ -207,12 +243,16 @@ class UserController extends Controller
      *     @OA\Response(response="500", description="Internal server error"),
      * )
      */
-    public function resetPassword(Request $request): void {}
+    public function resetPassword(Request $request): void
+    {
+    }
 
     /**
      * @OA\Put(
      *     path="/api/v1/user/edit",
      *     summary="Update use account",
+     *      tags={"Users"},
+     * 
      *
      *     @OA\Response(
      *         response="200",
@@ -232,7 +272,7 @@ class UserController extends Controller
         return $this->createJsonResponse($response['success'], $response['data']);
     }
 
-    private function createJsonResponse(int $success = 0, array $data = [], ?string $error = '', array $errors = [], $extra = []): JsonResponse
+    private function createJsonResponse(int $success = 0, array $data = [], ?string $error = '', array $errors = [], $extra = [], $status = 200): JsonResponse
     {
         return response()->json([
             'success' => $success,
@@ -240,6 +280,6 @@ class UserController extends Controller
             'error' => $error,
             'errors' => $errors,
             'extra' => $extra,
-        ]);
+        ], $status);
     }
 }

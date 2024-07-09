@@ -47,7 +47,7 @@ class JwtService
             ->relatedTo('user')
             ->identifiedBy(config('jwt.jwt_id'))
             ->issuedAt($now)
-            ->expiresAt($now->modify('+' . config('jwt.jwt_expiration') . ' minutes'))
+            ->expiresAt($now->modify('+'.config('jwt.jwt_expiration').' minutes'))
             ->withClaim($claim, $value)
             ->getToken($this->config->signer(), $this->config->signingKey());
 
@@ -65,7 +65,7 @@ class JwtService
                 $token
             );
             $user = Auth::user();
-            if (!$user) {
+            if (! $user) {
                 return false;
             }
             $constraints = [

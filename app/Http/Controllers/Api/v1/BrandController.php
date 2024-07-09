@@ -11,14 +11,73 @@ use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
+    /* @OA\Tag(
+        *     name="Brands",
+        *     description="Brand API endpoints"
+        * )
+        */
     protected BrandService $brandService;
 
     public function __construct(BrandService $brandService)
     {
         $this->brandService = $brandService;
     }
+
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/v1/brands",
+     *     summary="View brands",
+     *      tags={"Brands"},
+     * 
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         @OA\Schema(type="integer"),
+     *     ),
+     *     @OA\Parameter(
+     *         name="limit",
+     *         in="query",
+     *         @OA\Schema(type="integer"),
+     *     ),
+     *     @OA\Parameter(
+     *         name="sortBy",
+     *         in="query",
+     *         @OA\Schema(type="string"),
+     *     ),
+     *     @OA\Parameter(
+     *         name="desc",
+     *         in="query",
+     *         @OA\Schema(type="boolean"),
+     *     ),
+     * 
+     *     @OA\Response(response="200", description="Ok",
+     *     @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="current_page", type="int", example=1),
+     *             @OA\Property(property="data", type="array",
+     *                     @OA\Items(
+     *                     type="object",
+     *                      @OA\Property(property="id", type="int", example=1),
+     *                     )),
+     *               @OA\Property(property="uuid", type="string",            example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
+     *               @OA\Property(property="title", type="string",example="Brand title"),
+     *               @OA\Property(property="slug", type="string",example="Brand slug"),
+     *               @OA\Property(property="created_at", type="string",example="2024-07-09T03:11:38.000000Z"),
+     *               @OA\Property(property="updated_at", type="string",example="2024-07-09T03:11:38.000000Z"),
+     *         )),
+     *
+     *     @OA\Response(response="401", description="Unauthenticated",
+     *     @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated"),
+     *         )),
+     * 
+     *     @OA\Response(response="403", description="Unauthorized", 
+     *     @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Unauthorized"),
+     *         )),
+     * )
      */
     public function index(Request $request): JsonResponse
     {
@@ -31,7 +90,61 @@ class BrandController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/v1/brand/create",
+     *     summary="store brand",
+     *     tags={"Brands"},
+     *     security={{"bearerAuth":{}}},
+     * 
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 required={"title"},
+     *                 @OA\Property(
+     *                     property="title",
+     *                     type="string",
+     *                     description="Brand's title",
+     *                     example="Brand title example"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="slug",
+     *                     type="string",
+     *                     description="Brand's slug",
+     *                     example="Brand slug example"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *
+     *     @OA\Response(response="200", description="Ok",
+     *     @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="brand stored with success"),
+     *             @OA\Property(property="brand", type="object",
+     *                     @OA\Property(property="id", type="int", example=1),
+     *                     @OA\Property(property="uuid", type="string", example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
+     *                     @OA\Property(property="title", type="string",example="Brand title"),
+     *                     @OA\Property(property="slug", type="string",example="Brand slug"),
+     *                     @OA\Property(property="created_at", type="string",example="2024-07-09T03:11:38.000000Z"),
+     *                     @OA\Property(property="updated_at", type="string",example="2024-07-09T03:11:38.000000Z"),
+     *              ),
+     *         )),
+     *
+     *     @OA\Response(response="401", description="Unauthenticated",
+     *     @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated"),
+     *         )),
+     * 
+     *     @OA\Response(response="403", description="Unauthorized", 
+     *     @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Unauthorized"),
+     *         )),
+     * )
      */
     public function store(StoreBrandRequest $request)
     {
@@ -40,7 +153,31 @@ class BrandController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/v1/brand/{uuid}",
+     *     summary="View brand",
+     *     tags={"Brands"},
+     *     @OA\Parameter(
+     *         name="uuid",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(type="string"),
+     *     ),
+     *     @OA\Response(response="200", description="Ok",
+     *     @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="brand", type="object",
+     *                     @OA\Property(property="id", type="int", example=1),
+     *                     @OA\Property(property="uuid", type="string", example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
+     *                     @OA\Property(property="title", type="string",example="Brand title"),
+     *                     @OA\Property(property="slug", type="string",example="Brand slug"),
+     *                     @OA\Property(property="created_at", type="string",example="2024-07-09T03:11:38.000000Z"),
+     *                     @OA\Property(property="updated_at", type="string",example="2024-07-09T03:11:38.000000Z"),
+     *              ),
+     *         )),
+
+     *     @OA\Response(response="404", description="Not found"),
+     * )
      */
     public function show(string $uuid)
     {
@@ -48,7 +185,69 @@ class BrandController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/v1/brand/{uuid}",
+     *     summary="update brand",
+     *     tags={"Brands"},
+     *     security={{"bearerAuth":{}}},
+     * 
+     *     @OA\Parameter(
+     *         name="uuid",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(type="string"),
+     *     ),
+     * 
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/x-www-form-urlencoded",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 required={"title"},
+     *                 @OA\Property(
+     *                     property="title",
+     *                     type="string",
+     *                     description="Brand's title",
+     *                     example="Brand title example"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="slug",
+     *                     type="string",
+     *                     description="Brand's slug",
+     *                     example="Brand slug example"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *
+     *     @OA\Response(response="200", description="Ok",
+     *     @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="brand updated with success"),
+     *             @OA\Property(property="brand", type="object",
+     *                     @OA\Property(property="id", type="int", example=1),
+     *                     @OA\Property(property="uuid", type="string", example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
+     *                     @OA\Property(property="title", type="string",example="Brand title"),
+     *                     @OA\Property(property="slug", type="string",example="Brand slug"),
+     *                     @OA\Property(property="created_at", type="string",example="2024-07-08T03:11:38.000000Z"),
+     *                     @OA\Property(property="updated_at", type="string",example="2024-07-08T03:11:38.000000Z"),
+     *              ),
+     *         )),
+     *
+     *     @OA\Response(response="401", description="Unauthenticated",
+     *     @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated"),
+     *         )),
+     * 
+     *     @OA\Response(response="403", description="Unauthorized", 
+     *     @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Unauthorized"),
+     *         )),
+     *     @OA\Response(response="404", description="Not found"),
+     * )
      */
     public function update(UpdateBrandRequest $request, string $uuid)
     {
@@ -57,7 +256,38 @@ class BrandController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/v1/brand/{uuid}",
+     *     summary="delete brand",
+     *     tags={"Brands"},
+     *     security={{"bearerAuth":{}}},
+     * 
+     *     @OA\Parameter(
+     *         name="uuid",
+     *         required=true,
+     *         in="path",
+     *         @OA\Schema(type="string"),
+     *     ),
+     * 
+     *     @OA\Response(response="200", description="Ok",
+     *     @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="brand deleted with success"),
+     *     )),
+     *
+     *     @OA\Response(response="401", description="Unauthenticated",
+     *     @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated"),
+     *         )),
+     * 
+     *     @OA\Response(response="403", description="Unauthorized", 
+     *     @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Unauthorized"),
+     *         )),
+     *     @OA\Response(response="404", description="Not found"),
+     * )
      */
     public function destroy(string $uuid)
     {

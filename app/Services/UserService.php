@@ -53,10 +53,10 @@ class UserService
             $token = $this->jwtService->generateToken('uuid', $user->uuid);
             $user->token()->update(['expired_at' => $now->modify('+'.config('jwt.jwt_expiration').' minutes'), 'refreshed_at' => $now]);
 
-            return ['data' => ['token' => $token], 'success' => 1];
+            return ['data' => ['token' => $token], 'success' => 1, 'error' => null];
         }
 
-        return ['error' => 'Failed to authenticate user, check your credentials', 'success' => 0];
+        return ['data' => [], 'error' => 'Failed to authenticate user, check your credentials', 'success' => 0];
     }
 
     /**
