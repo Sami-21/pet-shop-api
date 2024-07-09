@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Brand;
+namespace App\Http\Requests\Category;
 
-use App\Models\Brand;
+use App\Models\Category;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateBrandRequest extends FormRequest
+class UpdateCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +23,10 @@ class UpdateBrandRequest extends FormRequest
      */
     public function rules(): array
     {
-        $brand = Brand::where('uuid', $this->route('uuid'))->firstOrFail();
+        $category = Category::where('uuid', $this->route('uuid'))->firstOrFail();
+
         return [
-            'title' => ['string', 'required', 'max:255',  'unique:brands,title,' . $brand->id],
+            'title' => ['string', 'required', 'max:255', 'unique:categories,title,' . $category->id],
             'slug' => ['string', 'max:255'],
         ];
     }

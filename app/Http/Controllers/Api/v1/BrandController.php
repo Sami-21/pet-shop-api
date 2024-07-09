@@ -58,13 +58,16 @@ class BrandController extends Controller
      *                     @OA\Items(
      *                     type="object",
      *                      @OA\Property(property="id", type="int", example=1),
+     *                      @OA\Property(property="uuid", type="string", example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
+     *                      @OA\Property(property="title", type="string",example="Brand title"),
+     *                      @OA\Property(property="slug", type="string",example="Brand slug"),
+     *                      @OA\Property(property="created_at", type="string",example="2024-07-09T03:11:38.000000Z"),
+     *                      @OA\Property(property="updated_at", type="string",example="2024-07-09T03:11:38.000000Z"),
      *                     )),
-     *               @OA\Property(property="uuid", type="string",            example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
-     *               @OA\Property(property="title", type="string",example="Brand title"),
-     *               @OA\Property(property="slug", type="string",example="Brand slug"),
-     *               @OA\Property(property="created_at", type="string",example="2024-07-09T03:11:38.000000Z"),
-     *               @OA\Property(property="updated_at", type="string",example="2024-07-09T03:11:38.000000Z"),
+     *             @OA\Property(property="per_page", type="int",example=10),
+     *             @OA\Property(property="total", type="int",example=10),
      *         )),
+     *
      *
      *     @OA\Response(response="401", description="Unauthenticated",
      *     @OA\JsonContent(
@@ -146,7 +149,7 @@ class BrandController extends Controller
      *         )),
      * )
      */
-    public function store(StoreBrandRequest $request)
+    public function store(StoreBrandRequest $request): JsonResponse
     {
         $brand = $this->brandService->storeBrand($request->validated());
         return response()->json(['message' => 'brand stored with success', 'brand' => $brand], 201);
@@ -179,7 +182,7 @@ class BrandController extends Controller
      *     @OA\Response(response="404", description="Not found"),
      * )
      */
-    public function show(string $uuid)
+    public function show(string $uuid): JsonResponse
     {
         return response()->json($this->brandService->getBrand($uuid));
     }
@@ -249,7 +252,7 @@ class BrandController extends Controller
      *     @OA\Response(response="404", description="Not found"),
      * )
      */
-    public function update(UpdateBrandRequest $request, string $uuid)
+    public function update(UpdateBrandRequest $request, string $uuid): JsonResponse
     {
         $brand = $this->brandService->updateBrand($uuid, $request->validated());
         return response()->json(['message' => 'brand updated with success', 'brand' => $brand]);
@@ -289,7 +292,7 @@ class BrandController extends Controller
      *     @OA\Response(response="404", description="Not found"),
      * )
      */
-    public function destroy(string $uuid)
+    public function destroy(string $uuid): JsonResponse
     {
         $this->brandService->deleteBrand($uuid);
 

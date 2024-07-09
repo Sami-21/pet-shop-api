@@ -17,6 +17,10 @@ namespace App\Services;
  *     name="Brands",
  *     description="Brands API endpoint"
  * ),
+ *  * @OA\Tag(
+ *     name="Categories",
+ *     description="Categories API endpoint"
+ * ),
  * @OA\SecurityScheme(
  *     securityScheme="bearerAuth",
  *     type="http",

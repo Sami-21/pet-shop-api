@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\v1\BrandController;
 use App\Http\Controllers\Api\v1\UserController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Services\SwaggerService;
 
@@ -22,6 +23,14 @@ Route::prefix('/v1')->group(function () {
     Route::get('/brands', [BrandController::class, 'index']);
     Route::get('/brand/{uuid}', [BrandController::class, 'index']);
     Route::controller(BrandController::class)->prefix('brand')->middleware(['auth.jwt', 'is.admin'])->group(function () {
+        Route::post('/create', 'store');
+        Route::put('/{uuid}', 'update');
+        Route::delete('/{uuid}', 'destroy');
+    });
+
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/category/{uuid}', [CategoryController::class, 'index']);
+    Route::controller(CategoryController::class)->prefix('category')->middleware(['auth.jwt', 'is.admin'])->group(function () {
         Route::post('/create', 'store');
         Route::put('/{uuid}', 'update');
         Route::delete('/{uuid}', 'destroy');
