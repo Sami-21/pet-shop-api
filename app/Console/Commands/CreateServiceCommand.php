@@ -10,7 +10,7 @@ class CreateServiceCommand extends Command
 
     protected $description = 'Create a new service';
 
-    public function handle()
+    public function handle(): void
     {
         $name = $this->argument('name');
         $repositoryName = $this->argument('repository');

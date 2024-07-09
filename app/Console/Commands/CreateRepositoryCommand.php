@@ -10,7 +10,7 @@ class CreateRepositoryCommand extends Command
 
     protected $description = 'Create a new repository class';
 
-    public function handle()
+    public function handle(): void
     {
         $name = $this->argument('name');
         $interfaceName = $this->argument('interface');

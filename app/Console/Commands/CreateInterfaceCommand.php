@@ -10,7 +10,7 @@ class CreateInterfaceCommand extends Command
 
     protected $description = 'Create a new interface';
 
-    public function handle()
+    public function handle(): void
     {
         $name = $this->argument('name');
         $interfacePath = app_path('Interfaces');
