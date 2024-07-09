@@ -32,8 +32,7 @@ class CategoryTest extends TestCase
 
     public function test_get_categories(): void
     {
-        $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->getJson('/api/v1/categories');
+        $response = $this->getJson('/api/v1/categories');
 
         $response->assertStatus(200)->assertJsonStructure([
             'current_page',
@@ -54,8 +53,7 @@ class CategoryTest extends TestCase
 
     public function test_get_category(): void
     {
-        $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->getJson('/api/v1/category/' . $this->category->uuid);
+        $response = $this->getJson('/api/v1/category/' . $this->category->uuid);
 
         $response->assertStatus(200)->assertJsonStructure([
             'id',

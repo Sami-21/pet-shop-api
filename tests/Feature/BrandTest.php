@@ -32,8 +32,7 @@ class BrandTest extends TestCase
 
     public function test_get_brands(): void
     {
-        $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->getJson('/api/v1/brands');
+        $response = $this->getJson('/api/v1/brands');
 
         $response->assertStatus(200)->assertJsonStructure([
             'current_page',
@@ -54,8 +53,7 @@ class BrandTest extends TestCase
 
     public function test_get_brand(): void
     {
-        $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->getJson('/api/v1/brand/' . $this->brand->uuid);
+        $response = $this->getJson('/api/v1/brand/' . $this->brand->uuid);
 
         $response->assertStatus(200)->assertJsonStructure([
             'id',
