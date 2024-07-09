@@ -115,7 +115,6 @@ php artisan test
 
 ## To Dos
 - User password reset / password change
-- 
 
 
 ## License
