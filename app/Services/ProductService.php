@@ -31,6 +31,7 @@ class ProductService
     public function updateProduct(string $uuid, array $data)
     {
         $product = $this->productRepository->getProduct($uuid);
+
         return $this->productRepository->updateProduct($product, $data);
     }
 

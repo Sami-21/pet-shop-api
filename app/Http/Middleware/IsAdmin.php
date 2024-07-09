@@ -20,6 +20,7 @@ class IsAdmin
         if ($user->is_admin) {
             return $next($request);
         }
+
         return response()->json(['error' => 'Unauthorized'], 403);
     }
 }

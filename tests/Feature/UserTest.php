@@ -13,6 +13,7 @@ class UserTest extends TestCase
     use RefreshDatabase;
 
     protected User $user;
+
     protected JwtService $jwtService;
 
     protected function setUp(): void
@@ -125,7 +126,7 @@ class UserTest extends TestCase
     public function test_get_user_orders(): void
     {
         $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->getJson('/api/v1/user/orders');
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)->getJson('/api/v1/user/orders');
 
         $response->assertStatus(200)->assertJsonStructure([
             'success',

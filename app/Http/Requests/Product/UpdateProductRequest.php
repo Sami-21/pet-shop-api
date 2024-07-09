@@ -27,7 +27,7 @@ class UpdateProductRequest extends FormRequest
 
         return [
             'category_uuid' => ['required', 'string', 'exists:categories,uuid'],
-            'title' => ['string', 'required', 'max:255', 'unique:products,title,' . $product->uuid],
+            'title' => ['string', 'required', 'max:255', 'unique:products,title,'.$product->uuid],
             'price' => ['required', 'decimal:2', 'min:0'],
             'brand' => ['required', 'string', 'exists:brands,uuid'],
             'image' => ['required', 'string', 'exists:files,uuid'],

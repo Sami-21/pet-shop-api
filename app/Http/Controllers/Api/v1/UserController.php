@@ -10,7 +10,6 @@ use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-
 class UserController extends Controller
 {
     protected UserService $userService;
@@ -25,7 +24,6 @@ class UserController extends Controller
      *     path="/api/v1/user",
      *     summary="View user account",
      *      tags={"Users"},
-     * 
      *
      *     @OA\Response(response="200", description="Ok",
      *
@@ -72,7 +70,6 @@ class UserController extends Controller
      *     path="/api/v1/user",
      *     summary="Delete user account",
      *      tags={"Users"},
-     * 
      *
      *     @OA\Response(response="200", description="Ok"),
      *     @OA\Response(response="401", description="Unauthenticated"),
@@ -93,7 +90,6 @@ class UserController extends Controller
      *     path="/api/v1/user/orders",
      *     summary="List all orders for the authenticated user",
      *      tags={"Users"},
-     * 
      *
      *     @OA\Response(response="200", description="Ok"),
      *     @OA\Response(response="401", description="Unauthenticated"),
@@ -118,7 +114,6 @@ class UserController extends Controller
      *     path="/api/v1/user/create",
      *     summary="Create new user account",
      *      tags={"Users"},
-     * 
      *
      *     @OA\Response(
      *         response="200",
@@ -140,7 +135,6 @@ class UserController extends Controller
      *     path="/api/v1/user/forgot-password",
      *     summary="Create a token to reset user password",
      *      tags={"Users"},
-     * 
      *
      *     @OA\Response(
      *         response="200",
@@ -153,16 +147,13 @@ class UserController extends Controller
      *     @OA\Response(response="500", description="Internal server error"),
      * )
      */
-    public function forgetPassword(Request $request): void
-    {
-    }
+    public function forgetPassword(Request $request): void {}
 
     /**
      * @OA\Post(
      *     path="/api/v1/user/login",
      *     summary="Login to his account",
      *      tags={"Users"},
-     * 
      *
      *     @OA\Response(
      *         response="200",
@@ -210,7 +201,6 @@ class UserController extends Controller
      *     path="/api/v1/user/logout",
      *     summary="Logout user",
      *      tags={"Users"},
-     * 
      *
      *     @OA\Response(
      *         response="200",
@@ -233,7 +223,6 @@ class UserController extends Controller
      *     path="/api/v1/user/reset-password-token",
      *     summary="Reset user password with token",
      *      tags={"Users"},
-     * 
      *
      *     @OA\Response(
      *         response="200",
@@ -243,16 +232,13 @@ class UserController extends Controller
      *     @OA\Response(response="500", description="Internal server error"),
      * )
      */
-    public function resetPassword(Request $request): void
-    {
-    }
+    public function resetPassword(Request $request): void {}
 
     /**
      * @OA\Put(
      *     path="/api/v1/user/edit",
      *     summary="Update use account",
      *      tags={"Users"},
-     * 
      *
      *     @OA\Response(
      *         response="200",

@@ -34,14 +34,14 @@ class ProductRepositoryTest extends TestCase
             'price' => 73433.56,
             'description' => 'eu dolor sed',
             'image' => $file->uuid,
-            'brand' => $brand->uuid
+            'brand' => $brand->uuid,
         ];
 
         $product = $this->productRepository->storeProduct($data);
 
         $this->assertInstanceOf(Product::class, $product);
         $this->assertDatabaseHas('products', [
-            'id' => $product->id
+            'id' => $product->id,
         ]);
     }
 
@@ -69,14 +69,14 @@ class ProductRepositoryTest extends TestCase
             'price' => 73433.56,
             'description' => 'eu dolor sed',
             'image' => $file->uuid,
-            'brand' => $brand->uuid
+            'brand' => $brand->uuid,
         ];
 
         $this->productRepository->updateProduct($product, $updatedData);
 
         $this->assertInstanceOf(Product::class, $product);
         $this->assertDatabaseHas('products', [
-            'id' => $product->id
+            'id' => $product->id,
         ]);
     }
 

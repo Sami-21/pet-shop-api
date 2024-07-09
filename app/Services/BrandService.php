@@ -31,6 +31,7 @@ class BrandService
     public function updateBrand(string $uuid, array $data)
     {
         $brand = $this->brandRepository->getBrand($uuid);
+
         return $this->brandRepository->updateBrand($brand, $data);
     }
 

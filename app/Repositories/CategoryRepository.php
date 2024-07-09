@@ -8,29 +8,30 @@ use Str;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
-  public function getCategories(int $limit, string $sortBy, bool $descFilter)
-  {
-    return Category::orderBy($sortBy,  $descFilter ? 'desc' : 'asc')->paginate($limit);
-  }
+    public function getCategories(int $limit, string $sortBy, bool $descFilter)
+    {
+        return Category::orderBy($sortBy, $descFilter ? 'desc' : 'asc')->paginate($limit);
+    }
 
-  public function getCategory(string $uuid)
-  {
-    return Category::where('uuid', $uuid)->firstOrFail();
-  }
+    public function getCategory(string $uuid)
+    {
+        return Category::where('uuid', $uuid)->firstOrFail();
+    }
 
-  public function storeCategory(array $data)
-  {
-    return Category::create(array_merge($data, ['uuid' => Str::uuid()]));
-  }
+    public function storeCategory(array $data)
+    {
+        return Category::create(array_merge($data, ['uuid' => Str::uuid()]));
+    }
 
-  public function updateCategory(Category $category, array $data)
-  {
-    $category->update($data);
-    return $category;
-  }
+    public function updateCategory(Category $category, array $data)
+    {
+        $category->update($data);
 
-  public function deleteCategory(Category $category)
-  {
-    $category->delete();
-  }
+        return $category;
+    }
+
+    public function deleteCategory(Category $category)
+    {
+        $category->delete();
+    }
 }

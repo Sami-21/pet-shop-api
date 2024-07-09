@@ -26,7 +26,7 @@ class UpdateCategoryRequest extends FormRequest
         $category = Category::where('uuid', $this->route('uuid'))->firstOrFail();
 
         return [
-            'title' => ['string', 'required', 'max:255', 'unique:categories,title,' . $category->id],
+            'title' => ['string', 'required', 'max:255', 'unique:categories,title,'.$category->id],
             'slug' => ['string', 'max:255'],
         ];
     }

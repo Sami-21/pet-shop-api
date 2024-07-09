@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Services;
 
 /**
@@ -9,6 +8,7 @@ namespace App\Services;
  *     version="1.0",
  *     description="Documentation for v1 api of pet store , this API is a recruitement test from Buckhill.",
  * ),
+ *
  * @OA\Tag(
  *     name="Users",
  *     description="Users API endpoint"
@@ -21,6 +21,7 @@ namespace App\Services;
  *     name="Categories",
  *     description="Categories API endpoint"
  * ),
+ *
  * @OA\SecurityScheme(
  *     securityScheme="bearerAuth",
  *     type="http",
@@ -29,8 +30,6 @@ namespace App\Services;
  *     description="Enter your Bearer token in the format: 'Bearer {token}'"
  * )
  */
-
-
 class SwaggerService
 {
     // This class is intentionally left empty.

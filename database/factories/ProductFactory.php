@@ -2,9 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Brand;
 use App\Models\Category;
-use App\Models\File;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Str;
 
@@ -28,7 +26,7 @@ class ProductFactory extends Factory
             'description' => fake()->text(),
             'metadata' => json_encode([
                 'brand' => Str::uuid(),
-                'file' => Str::uuid()
+                'file' => Str::uuid(),
             ]),
         ];
     }

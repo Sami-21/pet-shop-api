@@ -24,8 +24,9 @@ class UpdateBrandRequest extends FormRequest
     public function rules(): array
     {
         $brand = Brand::where('uuid', $this->route('uuid'))->firstOrFail();
+
         return [
-            'title' => ['string', 'required', 'max:255',  'unique:brands,title,' . $brand->id],
+            'title' => ['string', 'required', 'max:255',  'unique:brands,title,'.$brand->id],
             'slug' => ['string', 'max:255'],
         ];
     }

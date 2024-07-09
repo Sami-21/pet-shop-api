@@ -31,6 +31,7 @@ class CategoryService
     public function updateCategory(string $uuid, array $data)
     {
         $category = $this->categoryRepository->getCategory($uuid);
+
         return $this->categoryRepository->updateCategory($category, $data);
     }
 

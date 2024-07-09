@@ -5,7 +5,6 @@ use App\Http\Controllers\Api\v1\CategoryController;
 use App\Http\Controllers\Api\v1\ProductController;
 use App\Http\Controllers\Api\v1\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Services\SwaggerService;
 
 Route::prefix('/v1')->group(function () {
 

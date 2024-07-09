@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Services\JwtService;
 use Hash;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Str;
 use Tests\TestCase;
 
@@ -16,10 +15,10 @@ class BrandTest extends TestCase
     use RefreshDatabase;
 
     protected User $user;
+
     protected Brand $brand;
+
     protected JwtService $jwtService;
-
-
 
     protected function setUp(): void
     {
@@ -28,7 +27,6 @@ class BrandTest extends TestCase
         $this->user = User::factory()->create(['email' => 'admin@buckhill.co.uk', 'password' => Hash::make('admin'), 'is_admin' => true]);
         $this->brand = Brand::factory()->create();
     }
-
 
     public function test_get_brands(): void
     {
@@ -47,13 +45,13 @@ class BrandTest extends TestCase
             'per_page',
             'prev_page_url',
             'to',
-            'total'
+            'total',
         ]);
     }
 
     public function test_get_brand(): void
     {
-        $response = $this->getJson('/api/v1/brand/' . $this->brand->uuid);
+        $response = $this->getJson('/api/v1/brand/'.$this->brand->uuid);
 
         $response->assertStatus(200)->assertJsonStructure([
             'id',
@@ -61,14 +59,14 @@ class BrandTest extends TestCase
             'title',
             'slug',
             'created_at',
-            'updated_at'
+            'updated_at',
         ]);
     }
 
     public function test_get_brand_not_found(): void
     {
         $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->getJson('/api/v1/brand/' . Str::uuid());
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)->getJson('/api/v1/brand/'.Str::uuid());
 
         $response->assertStatus(404);
     }
@@ -76,9 +74,9 @@ class BrandTest extends TestCase
     public function test_store_brand(): void
     {
         $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->postJson('/api/v1/brand/create', [
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)->postJson('/api/v1/brand/create', [
             'title' => 'Test title',
-            'slug' => 'Test slug'
+            'slug' => 'Test slug',
         ]);
 
         $response->assertStatus(201)->assertJsonStructure([
@@ -89,12 +87,12 @@ class BrandTest extends TestCase
                 'title',
                 'slug',
                 'created_at',
-                'updated_at'
-            ]
+                'updated_at',
+            ],
         ]);
         $this->assertDatabaseHas('brands', [
             'title' => 'Test title',
-            'slug' => 'Test slug'
+            'slug' => 'Test slug',
         ]);
     }
 
@@ -102,11 +100,11 @@ class BrandTest extends TestCase
     {
         $response = $this->postJson('/api/v1/brand/create', [
             'title' => 'Test title',
-            'slug' => 'Test slug'
+            'slug' => 'Test slug',
         ]);
 
         $response->assertStatus(401)->assertJson([
-            'error' => 'Unauthenticated'
+            'error' => 'Unauthenticated',
         ]);
     }
 
@@ -115,22 +113,22 @@ class BrandTest extends TestCase
         $user = User::factory()->create(['is_admin' => false]);
 
         $token = $this->jwtService->generateToken('uuid', $user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->postJson('/api/v1/brand/create', [
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)->postJson('/api/v1/brand/create', [
             'title' => 'Test title',
-            'slug' => 'Test slug'
+            'slug' => 'Test slug',
         ]);
 
         $response->assertStatus(403)->assertJson([
-            'error' => 'Unauthorized'
+            'error' => 'Unauthorized',
         ]);
     }
 
     public function test_update_brand(): void
     {
         $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->putJson('/api/v1/brand/' . $this->brand->uuid, [
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)->putJson('/api/v1/brand/'.$this->brand->uuid, [
             'title' => 'Updated Test title',
-            'slug' => 'Updated Test slug'
+            'slug' => 'Updated Test slug',
         ]);
 
         $response->assertStatus(200)->assertJsonStructure([
@@ -141,21 +139,21 @@ class BrandTest extends TestCase
                 'title',
                 'slug',
                 'created_at',
-                'updated_at'
-            ]
+                'updated_at',
+            ],
         ]);
         $this->assertDatabaseHas('brands', [
             'title' => 'Updated Test title',
-            'slug' => 'Updated Test slug'
+            'slug' => 'Updated Test slug',
         ]);
     }
 
     public function test_update_brand_not_found(): void
     {
         $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->putJson('/api/v1/brand/' . Str::uuid(), [
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)->putJson('/api/v1/brand/'.Str::uuid(), [
             'title' => 'Updated Test title',
-            'slug' => 'Updated Test slug'
+            'slug' => 'Updated Test slug',
         ]);
 
         $response->assertStatus(404);
@@ -163,13 +161,13 @@ class BrandTest extends TestCase
 
     public function test_update_brand_unauthenticated(): void
     {
-        $response = $this->putJson('/api/v1/brand/' . $this->brand->uuid, [
+        $response = $this->putJson('/api/v1/brand/'.$this->brand->uuid, [
             'title' => 'Test title',
-            'slug' => 'Test slug'
+            'slug' => 'Test slug',
         ]);
 
         $response->assertStatus(401)->assertJson([
-            'error' => 'Unauthenticated'
+            'error' => 'Unauthenticated',
         ]);
     }
 
@@ -178,44 +176,44 @@ class BrandTest extends TestCase
         $user = User::factory()->create(['is_admin' => false]);
 
         $token = $this->jwtService->generateToken('uuid', $user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->putJson('/api/v1/brand/' . $this->brand->uuid, [
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)->putJson('/api/v1/brand/'.$this->brand->uuid, [
             'title' => 'Test title',
-            'slug' => 'Test slug'
+            'slug' => 'Test slug',
         ]);
 
         $response->assertStatus(403)->assertJson([
-            'error' => 'Unauthorized'
+            'error' => 'Unauthorized',
         ]);
     }
 
     public function test_delete_brand(): void
     {
         $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->deleteJson('/api/v1/brand/' . $this->brand->uuid);
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)->deleteJson('/api/v1/brand/'.$this->brand->uuid);
 
         $response->assertStatus(200)->assertJsonStructure([
             'message',
         ]);
         $this->assertDatabaseMissing('brands', [
             'title' => 'Test title',
-            'slug' => 'Test slug'
+            'slug' => 'Test slug',
         ]);
     }
 
     public function test_delete_brand_not_found(): void
     {
         $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->deleteJson('/api/v1/brand/' . Str::uuid());
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)->deleteJson('/api/v1/brand/'.Str::uuid());
 
         $response->assertStatus(404);
     }
 
     public function test_delete_brand_unauthenticated(): void
     {
-        $response = $this->putJson('/api/v1/brand/' . $this->brand->uuid);
+        $response = $this->putJson('/api/v1/brand/'.$this->brand->uuid);
 
         $response->assertStatus(401)->assertJson([
-            'error' => 'Unauthenticated'
+            'error' => 'Unauthenticated',
         ]);
     }
 
@@ -224,10 +222,10 @@ class BrandTest extends TestCase
         $user = User::factory()->create(['is_admin' => false]);
 
         $token = $this->jwtService->generateToken('uuid', $user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->putJson('/api/v1/brand/' . $this->brand->uuid);
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)->putJson('/api/v1/brand/'.$this->brand->uuid);
 
         $response->assertStatus(403)->assertJson([
-            'error' => 'Unauthorized'
+            'error' => 'Unauthorized',
         ]);
     }
 }

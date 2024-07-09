@@ -28,54 +28,74 @@ class ProductController extends Controller
      *     path="/api/v1/products",
      *     summary="View products",
      *      tags={"Products"},
-     * 
+     *
      *     @OA\Parameter(
      *         name="page",
      *         in="query",
+     *
      *         @OA\Schema(type="integer"),
      *     ),
+     *
      *     @OA\Parameter(
      *         name="limit",
      *         in="query",
+     *
      *         @OA\Schema(type="integer"),
      *     ),
+     *
      *     @OA\Parameter(
      *         name="sortBy",
      *         in="query",
+     *
      *         @OA\Schema(type="string"),
      *     ),
+     *
      *     @OA\Parameter(
      *         name="desc",
      *         in="query",
+     *
      *         @OA\Schema(type="boolean"),
      *     ),
+     *
      *     @OA\Parameter(
      *         name="category",
      *         in="query",
+     *
      *         @OA\Schema(type="string"),
      *     ),
+     *
      *     @OA\Parameter(
      *         name="price",
      *         in="query",
+     *
      *         @OA\Schema(type="float"),
      *     ),
+     *
      *     @OA\Parameter(
      *         name="brand",
      *         in="query",
+     *
      *         @OA\Schema(type="string"),
      *     ),
+     *
      *     @OA\Parameter(
      *         name="title",
      *         in="query",
+     *
      *         @OA\Schema(type="string"),
      *     ),
+     *
      *     @OA\Response(response="200", description="Ok",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="current_page", type="int", example=1),
      *             @OA\Property(property="data", type="array",
+     *
      *                     @OA\Items(
      *                     type="object",
+     *
      *                      @OA\Property(property="id", type="int", example=1),
      *                      @OA\Property(property="uuid", type="string", example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
      *                      @OA\Property(property="category_uuid", type="string",example="d166d772-7c61-4e53-95f1-gq31fds654fdg"),
@@ -95,14 +115,18 @@ class ProductController extends Controller
      *         )),
      *
      *     @OA\Response(response="401", description="Unauthenticated",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="message", type="string", example="Unauthenticated"),
      *         )),
-     * 
-     *     @OA\Response(response="403", description="Unauthorized", 
+     *
+     *     @OA\Response(response="403", description="Unauthorized",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="error", type="string", example="Unauthorized"),
      *         )),
      * )
@@ -114,8 +138,8 @@ class ProductController extends Controller
         $price = (int) $request->query('price', '0');
         $sortBy = $request->query('sortBy', 'created_at');
         $descFilter = filter_var($request->input('desc'), FILTER_VALIDATE_BOOLEAN);
-        $title =  $request->query('title', '');
-        $brandTitle =  $request->query('brand', '');
+        $title = $request->query('title', '');
+        $brandTitle = $request->query('brand', '');
         $response = $this->productService->getProducts($limit, $sortBy, $descFilter, $category, $price, $title, $brandTitle);
 
         return response()->json($response);
@@ -127,14 +151,17 @@ class ProductController extends Controller
      *     summary="store product",
      *     tags={"Products"},
      *     security={{"bearerAuth":{}}},
-     * 
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
      *                 type="object",
      *                 required={"title" , "category_uuid" , "price" , "description" , "image" , "brand"},
+     *
      *                 @OA\Property(
      *                     property="title",
      *                     type="string",
@@ -176,8 +203,10 @@ class ProductController extends Controller
      *     ),
      *
      *     @OA\Response(response="200", description="Ok",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="message", type="string", example="product stored with success"),
      *             @OA\Property(property="product", type="object",
      *                      @OA\Property(property="id", type="int", example=1),
@@ -196,14 +225,18 @@ class ProductController extends Controller
      *         )),
      *
      *     @OA\Response(response="401", description="Unauthenticated",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="message", type="string", example="Unauthenticated"),
      *         )),
-     * 
-     *     @OA\Response(response="403", description="Unauthorized", 
+     *
+     *     @OA\Response(response="403", description="Unauthorized",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="error", type="string", example="Unauthorized"),
      *         )),
      * )
@@ -211,6 +244,7 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request): JsonResponse
     {
         $product = $this->productService->storeProduct($request->validated());
+
         return response()->json(['message' => 'product stored with success', 'product' => $product], 201);
     }
 
@@ -219,15 +253,20 @@ class ProductController extends Controller
      *     path="/api/v1/product/{uuid}",
      *     summary="View product",
      *     tags={"Products"},
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         required=true,
      *         in="path",
+     *
      *         @OA\Schema(type="string"),
      *     ),
+     *
      *     @OA\Response(response="200", description="Ok",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *                      @OA\Property(property="id", type="int", example=1),
      *                      @OA\Property(property="uuid", type="string", example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
      *                      @OA\Property(property="category_uuid", type="string",example="d166d772-7c61-4e53-95f1-gq31fds654fdg"),
@@ -241,7 +280,8 @@ class ProductController extends Controller
      *                      @OA\Property(property="created_at", type="string",example="2024-07-09T03:11:38.000000Z"),
      *                      @OA\Property(property="updated_at", type="string",example="2024-07-09T03:11:38.000000Z"),
      *         )),
-        
+
+     *
      *     @OA\Response(response="404", description="Not found"),
      * )
      */
@@ -256,21 +296,25 @@ class ProductController extends Controller
      *     summary="update product",
      *     tags={"Products"},
      *     security={{"bearerAuth":{}}},
-     * 
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         required=true,
      *         in="path",
+     *
      *         @OA\Schema(type="string"),
      *     ),
-     * 
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
      *                 type="object",
      *                 required={"title" , "category_uuid" , "price" , "description" , "image" , "brand"},
+     *
      *                 @OA\Property(
      *                     property="title",
      *                     type="string",
@@ -312,8 +356,10 @@ class ProductController extends Controller
      *     ),
      *
      *     @OA\Response(response="200", description="Ok",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="message", type="string", example="product updated with success"),
      *             @OA\Property(property="product", type="object",
      *                      @OA\Property(property="id", type="int", example=1),
@@ -332,22 +378,28 @@ class ProductController extends Controller
      *         )),
      *
      *     @OA\Response(response="401", description="Unauthenticated",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="message", type="string", example="Unauthenticated"),
      *         )),
-     * 
-     *     @OA\Response(response="403", description="Unauthorized", 
+     *
+     *     @OA\Response(response="403", description="Unauthorized",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="error", type="string", example="Unauthorized"),
      *         )),
+     *
      *     @OA\Response(response="404", description="Not found"),
      * )
      */
     public function update(UpdateProductRequest $request, string $uuid): JsonResponse
     {
         $product = $this->productService->updateProduct($uuid, $request->validated());
+
         return response()->json(['message' => 'product updated with success', 'product' => $product]);
     }
 
@@ -357,31 +409,39 @@ class ProductController extends Controller
      *     summary="delete product",
      *     tags={"Products"},
      *     security={{"bearerAuth":{}}},
-     * 
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         required=true,
      *         in="path",
+     *
      *         @OA\Schema(type="string"),
      *     ),
-     * 
+     *
      *     @OA\Response(response="200", description="Ok",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="message", type="string", example="product deleted with success"),
      *     )),
      *
      *     @OA\Response(response="401", description="Unauthenticated",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="message", type="string", example="Unauthenticated"),
      *         )),
-     * 
-     *     @OA\Response(response="403", description="Unauthorized", 
+     *
+     *     @OA\Response(response="403", description="Unauthorized",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="error", type="string", example="Unauthorized"),
      *         )),
+     *
      *     @OA\Response(response="404", description="Not found"),
      * )
      */

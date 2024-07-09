@@ -28,35 +28,46 @@ class CategoryController extends Controller
      *     path="/api/v1/categories",
      *     summary="View categories",
      *      tags={"Categories"},
-     * 
+     *
      *     @OA\Parameter(
      *         name="page",
      *         in="query",
+     *
      *         @OA\Schema(type="integer"),
      *     ),
+     *
      *     @OA\Parameter(
      *         name="limit",
      *         in="query",
+     *
      *         @OA\Schema(type="integer"),
      *     ),
+     *
      *     @OA\Parameter(
      *         name="sortBy",
      *         in="query",
+     *
      *         @OA\Schema(type="string"),
      *     ),
+     *
      *     @OA\Parameter(
      *         name="desc",
      *         in="query",
+     *
      *         @OA\Schema(type="boolean"),
      *     ),
-     * 
+     *
      *     @OA\Response(response="200", description="Ok",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="current_page", type="int", example=1),
      *             @OA\Property(property="data", type="array",
+     *
      *                     @OA\Items(
      *                     type="object",
+     *
      *                      @OA\Property(property="id", type="int", example=1),
      *                      @OA\Property(property="uuid", type="string", example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
      *                      @OA\Property(property="title", type="string",example="Category title"),
@@ -69,14 +80,18 @@ class CategoryController extends Controller
      *         )),
      *
      *     @OA\Response(response="401", description="Unauthenticated",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="message", type="string", example="Unauthenticated"),
      *         )),
-     * 
-     *     @OA\Response(response="403", description="Unauthorized", 
+     *
+     *     @OA\Response(response="403", description="Unauthorized",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="error", type="string", example="Unauthorized"),
      *         )),
      * )
@@ -97,14 +112,17 @@ class CategoryController extends Controller
      *     summary="store category",
      *     tags={"Categories"},
      *     security={{"bearerAuth":{}}},
-     * 
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
      *                 type="object",
      *                 required={"title"},
+     *
      *                 @OA\Property(
      *                     property="title",
      *                     type="string",
@@ -122,8 +140,10 @@ class CategoryController extends Controller
      *     ),
      *
      *     @OA\Response(response="200", description="Ok",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="message", type="string", example="category stored with success"),
      *             @OA\Property(property="category", type="object",
      *                     @OA\Property(property="id", type="int", example=1),
@@ -136,14 +156,18 @@ class CategoryController extends Controller
      *         )),
      *
      *     @OA\Response(response="401", description="Unauthenticated",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="message", type="string", example="Unauthenticated"),
      *         )),
-     * 
-     *     @OA\Response(response="403", description="Unauthorized", 
+     *
+     *     @OA\Response(response="403", description="Unauthorized",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="error", type="string", example="Unauthorized"),
      *         )),
      * )
@@ -151,6 +175,7 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request): JsonResponse
     {
         $category = $this->categoryService->storeCategory($request->validated());
+
         return response()->json(['message' => 'category stored with success', 'category' => $category], 201);
     }
 
@@ -159,15 +184,20 @@ class CategoryController extends Controller
      *     path="/api/v1/category/{uuid}",
      *     summary="View category",
      *     tags={"Categories"},
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         required=true,
      *         in="path",
+     *
      *         @OA\Schema(type="string"),
      *     ),
+     *
      *     @OA\Response(response="200", description="Ok",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="category", type="object",
      *                     @OA\Property(property="id", type="int", example=1),
      *                     @OA\Property(property="uuid", type="string", example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
@@ -177,7 +207,8 @@ class CategoryController extends Controller
      *                     @OA\Property(property="updated_at", type="string",example="2024-07-09T03:11:38.000000Z"),
      *              ),
      *         )),
-    
+
+     *
      *     @OA\Response(response="404", description="Not found"),
      * )
      */
@@ -192,21 +223,25 @@ class CategoryController extends Controller
      *     summary="update category",
      *     tags={"Categories"},
      *     security={{"bearerAuth":{}}},
-     * 
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         required=true,
      *         in="path",
+     *
      *         @OA\Schema(type="string"),
      *     ),
-     * 
+     *
      *     @OA\RequestBody(
      *         required=true,
+     *
      *         @OA\MediaType(
      *             mediaType="application/x-www-form-urlencoded",
+     *
      *             @OA\Schema(
      *                 type="object",
      *                 required={"title"},
+     *
      *                 @OA\Property(
      *                     property="title",
      *                     type="string",
@@ -224,8 +259,10 @@ class CategoryController extends Controller
      *     ),
      *
      *     @OA\Response(response="200", description="Ok",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="message", type="string", example="category updated with success"),
      *             @OA\Property(property="category", type="object",
      *                     @OA\Property(property="id", type="int", example=1),
@@ -238,22 +275,28 @@ class CategoryController extends Controller
      *         )),
      *
      *     @OA\Response(response="401", description="Unauthenticated",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="message", type="string", example="Unauthenticated"),
      *         )),
-     * 
-     *     @OA\Response(response="403", description="Unauthorized", 
+     *
+     *     @OA\Response(response="403", description="Unauthorized",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="error", type="string", example="Unauthorized"),
      *         )),
+     *
      *     @OA\Response(response="404", description="Not found"),
      * )
      */
     public function update(UpdateCategoryRequest $request, string $uuid): JsonResponse
     {
         $category = $this->categoryService->updateCategory($uuid, $request->validated());
+
         return response()->json(['message' => 'category updated with success', 'category' => $category]);
     }
 
@@ -263,31 +306,39 @@ class CategoryController extends Controller
      *     summary="delete category",
      *     tags={"Categories"},
      *     security={{"bearerAuth":{}}},
-     * 
+     *
      *     @OA\Parameter(
      *         name="uuid",
      *         required=true,
      *         in="path",
+     *
      *         @OA\Schema(type="string"),
      *     ),
-     * 
+     *
      *     @OA\Response(response="200", description="Ok",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="message", type="string", example="category deleted with success"),
      *     )),
      *
      *     @OA\Response(response="401", description="Unauthenticated",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="message", type="string", example="Unauthenticated"),
      *         )),
-     * 
-     *     @OA\Response(response="403", description="Unauthorized", 
+     *
+     *     @OA\Response(response="403", description="Unauthorized",
+     *
      *     @OA\JsonContent(
      *             type="object",
+     *
      *             @OA\Property(property="error", type="string", example="Unauthorized"),
      *         )),
+     *
      *     @OA\Response(response="404", description="Not found"),
      * )
      */
