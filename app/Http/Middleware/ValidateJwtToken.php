@@ -31,10 +31,6 @@ class ValidateJwtToken
             if ($this->jwtService->validateToken($token)) {
                 $user = $this->jwtService->parseToken($token);
                 if ($user) {
-                    $request->setUserResolver(function () use ($user) {
-                        return $user;
-                    });
-
                     return $next($request);
                 }
 
@@ -43,7 +39,7 @@ class ValidateJwtToken
 
             return response()->json(['error' => 'Invalid token'], 401);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Unauthenticated', 'error' => $e->getMessage()], 401);
+            return response()->json(['message' => 'Unauthenticated', 'error' => $e->getMessage()], 401);
         }
     }
 }

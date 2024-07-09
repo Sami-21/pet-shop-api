@@ -39,12 +39,12 @@ class UserController extends Controller
      *     @OA\Response(response="500", description="Internal server error"),
      * )
      */
-    public function me(Request $request)
+    public function me(Request $request): JsonResponse
     {
-        $token = $request->bearerToken();
+        $token = (string) $request->bearerToken();
         $response = $this->userService->getUser($token);
 
-        return $this->createJsonResponse($response);
+        return $this->createJsonResponse($response['success'], $response['data']);
     }
 
     /**
@@ -58,12 +58,12 @@ class UserController extends Controller
      *     @OA\Response(response="500", description="Internal server error"),
      * )
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): JsonResponse
     {
         $user = $request->user();
         $response = $this->userService->deleteUser($user);
 
-        return $this->createJsonResponse($response);
+        return $this->createJsonResponse($response['success'], $response['data']);
     }
 
     /**
@@ -78,15 +78,15 @@ class UserController extends Controller
      *     @OA\Response(response="500", description="Internal server error"),
      * )
      */
-    public function getOrders(Request $request)
+    public function getOrders(Request $request): JsonResponse
     {
-        $limit = $request->query('limit', 10);
+        $limit = (int) $request->query('limit', '10');
         $sortBy = $request->query('sortBy', 'created_at');
         $descFilter = filter_var($request->input('desc'), FILTER_VALIDATE_BOOLEAN);
         $user = $request->user();
         $response = $this->userService->getUserOrders($user, $limit, $sortBy, $descFilter);
 
-        return $this->createJsonResponse($response);
+        return $this->createJsonResponse($response['success'], $response['data']);
     }
 
     /**
@@ -102,11 +102,11 @@ class UserController extends Controller
      *     @OA\Response(response="500", description="Internal server error"),
      * )
      */
-    public function store(StoreUserRequest $request)
+    public function store(StoreUserRequest $request): JsonResponse
     {
         $response = $this->userService->register($request->validated());
 
-        return $this->createJsonResponse($response);
+        return $this->createJsonResponse($response['success'], $response['data']);
     }
 
     /**
@@ -125,7 +125,7 @@ class UserController extends Controller
      *     @OA\Response(response="500", description="Internal server error"),
      * )
      */
-    public function forgetPassword(Request $request) {}
+    public function forgetPassword(Request $request): void {}
 
     /**
      * @OA\Post(
@@ -165,12 +165,12 @@ class UserController extends Controller
      *     @OA\Response(response="500", description="Internal server error"),
      * )
      */
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): JsonResponse
     {
         $credentials = $request->only(['email', 'password']);
         $response = $this->userService->login($credentials);
 
-        return $this->createJsonResponse($response);
+        return $this->createJsonResponse($response['success'], $response['data']);
     }
 
     /**
@@ -187,11 +187,11 @@ class UserController extends Controller
      *     @OA\Response(response="500", description="Internal server error"),
      * )
      */
-    public function logout(Request $request)
+    public function logout(): JsonResponse
     {
         $response = $this->userService->logout();
 
-        return $this->createJsonResponse($response);
+        return $this->createJsonResponse($response['success']);
     }
 
     /**
@@ -207,7 +207,7 @@ class UserController extends Controller
      *     @OA\Response(response="500", description="Internal server error"),
      * )
      */
-    public function resetPassword(Request $request) {}
+    public function resetPassword(Request $request): void {}
 
     /**
      * @OA\Put(
@@ -225,21 +225,21 @@ class UserController extends Controller
      *     @OA\Response(response="500", description="Internal server error"),
      * )
      */
-    public function update(UpdateUserRequest $request)
+    public function update(UpdateUserRequest $request): JsonResponse
     {
         $response = $this->userService->updateUser($request->user(), $request->validated());
 
-        return $this->createJsonResponse($response);
+        return $this->createJsonResponse($response['success'], $response['data']);
     }
 
-    private function createJsonResponse(array $payload): JsonResponse
+    private function createJsonResponse(int $success = 0, array $data = [], ?string $error = '', array $errors = [], $extra = []): JsonResponse
     {
         return response()->json([
-            'success' => array_key_exists('success', $payload) ? $payload['success'] : 0,
-            'data' => array_key_exists('data', $payload) ? $payload['data'] : [],
-            'error' => array_key_exists('error', $payload) ? $payload['error'] : null,
-            'errors' => array_key_exists('errors', $payload) ? $payload['errors'] : [],
-            'extra' => array_key_exists('extra', $payload) ? $payload['extra'] : [],
+            'success' => $success,
+            'data' => $data,
+            'error' => $error,
+            'errors' => $errors,
+            'extra' => $extra,
         ]);
     }
 }

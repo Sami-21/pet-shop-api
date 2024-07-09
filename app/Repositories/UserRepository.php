@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Interfaces\UserRepositoryInterface;
-use App\Models\JwtToken;
 use App\Models\User;
 use Carbon\Carbon;
 use Hash;
@@ -22,19 +21,6 @@ class UserRepository implements UserRepositoryInterface
         );
     }
 
-    public function createJwtToken(array $data): JwtToken
-    {
-        return JwtToken::create([
-            'user_id' => $data['user_id'],
-            'token_title' => 'authentication token',
-            // 'restrictions' =>$data['restrictions'],
-            // 'permissions' =>$data['permissions'],
-            'expired_at' => $data['expired_at'],
-            // 'last_used_at' => $data['last_used_at'],
-            // 'refreshed_at' => $data['refreshed_at'],
-        ]);
-    }
-
     public function getUserOrders(User $user, int $limit, string $sortBy, bool $descFilter)
     {
         if ($descFilter) {
@@ -47,7 +33,6 @@ class UserRepository implements UserRepositoryInterface
     public function destroyUser(User $user): void
     {
         $user->delete();
-
     }
 
     public function updateUser(User $user, array $data): User
