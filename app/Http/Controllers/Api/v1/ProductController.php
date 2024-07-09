@@ -49,7 +49,26 @@ class ProductController extends Controller
      *         in="query",
      *         @OA\Schema(type="boolean"),
      *     ),
-     * 
+     *     @OA\Parameter(
+     *         name="category",
+     *         in="query",
+     *         @OA\Schema(type="string"),
+     *     ),
+     *     @OA\Parameter(
+     *         name="price",
+     *         in="query",
+     *         @OA\Schema(type="float"),
+     *     ),
+     *     @OA\Parameter(
+     *         name="brand",
+     *         in="query",
+     *         @OA\Schema(type="string"),
+     *     ),
+     *     @OA\Parameter(
+     *         name="title",
+     *         in="query",
+     *         @OA\Schema(type="string"),
+     *     ),
      *     @OA\Response(response="200", description="Ok",
      *     @OA\JsonContent(
      *             type="object",
@@ -59,8 +78,15 @@ class ProductController extends Controller
      *                     type="object",
      *                      @OA\Property(property="id", type="int", example=1),
      *                      @OA\Property(property="uuid", type="string", example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
+     *                      @OA\Property(property="category_uuid", type="string",example="d166d772-7c61-4e53-95f1-gq31fds654fdg"),
      *                      @OA\Property(property="title", type="string",example="Product title"),
-     *                      @OA\Property(property="slug", type="string",example="Product slug"),
+     *                      @OA\Property(property="price", type="float",example="1350.00"),
+     *                      @OA\Property(property="description", type="string",example="Product description"),
+     *                      @OA\Property(property="metadata", type="object",
+     *                          @OA\Property(property="file", type="string",example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
+     *                          @OA\Property(property="brand", type="string",example="d166d772-7c61-4e53-95f1-8e0a27748e3a")
+     *                       ),
+     *                      @OA\Property(property="deleted_at", type="string|null",example="null"),
      *                      @OA\Property(property="created_at", type="string",example="2024-07-09T03:11:38.000000Z"),
      *                      @OA\Property(property="updated_at", type="string",example="2024-07-09T03:11:38.000000Z"),
      *                     )),
@@ -108,7 +134,7 @@ class ProductController extends Controller
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 type="object",
-     *                 required={"title"},
+     *                 required={"title" , "category_uuid" , "price" , "description" , "image" , "brand"},
      *                 @OA\Property(
      *                     property="title",
      *                     type="string",
@@ -116,10 +142,34 @@ class ProductController extends Controller
      *                     example="Product title example"
      *                 ),
      *                 @OA\Property(
-     *                     property="slug",
+     *                     property="category_uuid",
      *                     type="string",
-     *                     description="Product's slug",
-     *                     example="Product slug example"
+     *                     description="Product category",
+     *                     example="d166d772-7c61-4e53-95f1-8e0a27748e3a"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="price",
+     *                     type="float",
+     *                     description="Product price",
+     *                     example="12350.00"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="description",
+     *                     type="string",
+     *                     description="Product description",
+     *                     example="Product description example"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="image",
+     *                     type="string",
+     *                     description="Product image uuid",
+     *                     example="d166d772-7c61-dfs0-95f1-8e0a27748e3a"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="brand",
+     *                     type="string",
+     *                     description="Product brand uuid",
+     *                     example="d166d772-7c61-4e53-dsf9-8e0a27748e3a"
      *                 )
      *             )
      *         )
@@ -130,13 +180,19 @@ class ProductController extends Controller
      *             type="object",
      *             @OA\Property(property="message", type="string", example="product stored with success"),
      *             @OA\Property(property="product", type="object",
-     *                     @OA\Property(property="id", type="int", example=1),
-     *                     @OA\Property(property="uuid", type="string", example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
-     *                     @OA\Property(property="title", type="string",example="Product title"),
-     *                     @OA\Property(property="slug", type="string",example="Product slug"),
-     *                     @OA\Property(property="created_at", type="string",example="2024-07-09T03:11:38.000000Z"),
-     *                     @OA\Property(property="updated_at", type="string",example="2024-07-09T03:11:38.000000Z"),
-     *              ),
+     *                      @OA\Property(property="id", type="int", example=1),
+     *                      @OA\Property(property="uuid", type="string", example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
+     *                      @OA\Property(property="category_uuid", type="string",example="d166d772-7c61-4e53-95f1-gq31fds654fdg"),
+     *                      @OA\Property(property="title", type="string",example="Product title"),
+     *                      @OA\Property(property="price", type="float",example="1350.00"),
+     *                      @OA\Property(property="description", type="string",example="Product description"),
+     *                      @OA\Property(property="metadata", type="object",
+     *                          @OA\Property(property="file", type="string",example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
+     *                          @OA\Property(property="brand", type="string",example="d166d772-7c61-4e53-95f1-8e0a27748e3a")
+     *                       ),
+     *                      @OA\Property(property="created_at", type="string",example="2024-07-09T03:11:38.000000Z"),
+     *                      @OA\Property(property="updated_at", type="string",example="2024-07-09T03:11:38.000000Z"),
+     *            ),
      *         )),
      *
      *     @OA\Response(response="401", description="Unauthenticated",
@@ -172,14 +228,18 @@ class ProductController extends Controller
      *     @OA\Response(response="200", description="Ok",
      *     @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="product", type="object",
-     *                     @OA\Property(property="id", type="int", example=1),
-     *                     @OA\Property(property="uuid", type="string", example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
-     *                     @OA\Property(property="title", type="string",example="Product title"),
-     *                     @OA\Property(property="slug", type="string",example="Product slug"),
-     *                     @OA\Property(property="created_at", type="string",example="2024-07-09T03:11:38.000000Z"),
-     *                     @OA\Property(property="updated_at", type="string",example="2024-07-09T03:11:38.000000Z"),
-     *              ),
+     *                      @OA\Property(property="id", type="int", example=1),
+     *                      @OA\Property(property="uuid", type="string", example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
+     *                      @OA\Property(property="category_uuid", type="string",example="d166d772-7c61-4e53-95f1-gq31fds654fdg"),
+     *                      @OA\Property(property="title", type="string",example="Product title"),
+     *                      @OA\Property(property="price", type="float",example="1350.00"),
+     *                      @OA\Property(property="description", type="string",example="Product description"),
+     *                      @OA\Property(property="metadata", type="object",
+     *                          @OA\Property(property="file", type="string",example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
+     *                          @OA\Property(property="brand", type="string",example="d166d772-7c61-4e53-95f1-8e0a27748e3a")
+     *                       ),
+     *                      @OA\Property(property="created_at", type="string",example="2024-07-09T03:11:38.000000Z"),
+     *                      @OA\Property(property="updated_at", type="string",example="2024-07-09T03:11:38.000000Z"),
      *         )),
         
      *     @OA\Response(response="404", description="Not found"),
@@ -210,7 +270,7 @@ class ProductController extends Controller
      *             mediaType="application/x-www-form-urlencoded",
      *             @OA\Schema(
      *                 type="object",
-     *                 required={"title"},
+     *                 required={"title" , "category_uuid" , "price" , "description" , "image" , "brand"},
      *                 @OA\Property(
      *                     property="title",
      *                     type="string",
@@ -218,10 +278,34 @@ class ProductController extends Controller
      *                     example="Product title example"
      *                 ),
      *                 @OA\Property(
-     *                     property="slug",
+     *                     property="category_uuid",
      *                     type="string",
-     *                     description="Product's slug",
-     *                     example="Product slug example"
+     *                     description="Product category",
+     *                     example="d166d772-7c61-4e53-95f1-8e0a27748e3a"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="price",
+     *                     type="float",
+     *                     description="Product price",
+     *                     example="12350.00"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="description",
+     *                     type="string",
+     *                     description="Product description",
+     *                     example="Product description example"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="image",
+     *                     type="string",
+     *                     description="Product image uuid",
+     *                     example="d166d772-7c61-dfs0-95f1-8e0a27748e3a"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="brand",
+     *                     type="string",
+     *                     description="Product brand uuid",
+     *                     example="d166d772-7c61-4e53-dsf9-8e0a27748e3a"
      *                 )
      *             )
      *         )
@@ -232,13 +316,19 @@ class ProductController extends Controller
      *             type="object",
      *             @OA\Property(property="message", type="string", example="product updated with success"),
      *             @OA\Property(property="product", type="object",
-     *                     @OA\Property(property="id", type="int", example=1),
-     *                     @OA\Property(property="uuid", type="string", example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
-     *                     @OA\Property(property="title", type="string",example="Product title"),
-     *                     @OA\Property(property="slug", type="string",example="Product slug"),
-     *                     @OA\Property(property="created_at", type="string",example="2024-07-08T03:11:38.000000Z"),
-     *                     @OA\Property(property="updated_at", type="string",example="2024-07-08T03:11:38.000000Z"),
-     *              ),
+     *                      @OA\Property(property="id", type="int", example=1),
+     *                      @OA\Property(property="uuid", type="string", example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
+     *                      @OA\Property(property="category_uuid", type="string",example="d166d772-7c61-4e53-95f1-gq31fds654fdg"),
+     *                      @OA\Property(property="title", type="string",example="Product title"),
+     *                      @OA\Property(property="price", type="float",example="1350.00"),
+     *                      @OA\Property(property="description", type="string",example="Product description"),
+     *                      @OA\Property(property="metadata", type="object",
+     *                          @OA\Property(property="file", type="string",example="d166d772-7c61-4e53-95f1-8e0a27748e3a"),
+     *                          @OA\Property(property="brand", type="string",example="d166d772-7c61-4e53-95f1-8e0a27748e3a")
+     *                       ),
+     *                      @OA\Property(property="created_at", type="string",example="2024-07-09T03:11:38.000000Z"),
+     *                      @OA\Property(property="updated_at", type="string",example="2024-07-09T03:11:38.000000Z"),
+     *            ),
      *         )),
      *
      *     @OA\Response(response="401", description="Unauthenticated",

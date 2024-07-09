@@ -1073,6 +1073,34 @@
                         "schema": {
                             "type": "boolean"
                         }
+                    },
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "price",
+                        "in": "query",
+                        "schema": {
+                            "type": "float"
+                        }
+                    },
+                    {
+                        "name": "brand",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -1098,13 +1126,39 @@
                                                         "type": "string",
                                                         "example": "d166d772-7c61-4e53-95f1-8e0a27748e3a"
                                                     },
+                                                    "category_uuid": {
+                                                        "type": "string",
+                                                        "example": "d166d772-7c61-4e53-95f1-gq31fds654fdg"
+                                                    },
                                                     "title": {
                                                         "type": "string",
                                                         "example": "Product title"
                                                     },
-                                                    "slug": {
+                                                    "price": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": "1350.00"
+                                                    },
+                                                    "description": {
                                                         "type": "string",
-                                                        "example": "Product slug"
+                                                        "example": "Product description"
+                                                    },
+                                                    "metadata": {
+                                                        "properties": {
+                                                            "file": {
+                                                                "type": "string",
+                                                                "example": "d166d772-7c61-4e53-95f1-8e0a27748e3a"
+                                                            },
+                                                            "brand": {
+                                                                "type": "string",
+                                                                "example": "d166d772-7c61-4e53-95f1-8e0a27748e3a"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "deleted_at": {
+                                                        "type": "string|null",
+                                                        "example": "null"
                                                     },
                                                     "created_at": {
                                                         "type": "string",
@@ -1180,7 +1234,12 @@
                         "application/x-www-form-urlencoded": {
                             "schema": {
                                 "required": [
-                                    "title"
+                                    "title",
+                                    "category_uuid",
+                                    "price",
+                                    "description",
+                                    "image",
+                                    "brand"
                                 ],
                                 "properties": {
                                     "title": {
@@ -1188,10 +1247,31 @@
                                         "type": "string",
                                         "example": "Product title example"
                                     },
-                                    "slug": {
-                                        "description": "Product's slug",
+                                    "category_uuid": {
+                                        "description": "Product category",
                                         "type": "string",
-                                        "example": "Product slug example"
+                                        "example": "d166d772-7c61-4e53-95f1-8e0a27748e3a"
+                                    },
+                                    "price": {
+                                        "description": "Product price",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "12350.00"
+                                    },
+                                    "description": {
+                                        "description": "Product description",
+                                        "type": "string",
+                                        "example": "Product description example"
+                                    },
+                                    "image": {
+                                        "description": "Product image uuid",
+                                        "type": "string",
+                                        "example": "d166d772-7c61-dfs0-95f1-8e0a27748e3a"
+                                    },
+                                    "brand": {
+                                        "description": "Product brand uuid",
+                                        "type": "string",
+                                        "example": "d166d772-7c61-4e53-dsf9-8e0a27748e3a"
                                     }
                                 },
                                 "type": "object"
@@ -1220,13 +1300,35 @@
                                                     "type": "string",
                                                     "example": "d166d772-7c61-4e53-95f1-8e0a27748e3a"
                                                 },
+                                                "category_uuid": {
+                                                    "type": "string",
+                                                    "example": "d166d772-7c61-4e53-95f1-gq31fds654fdg"
+                                                },
                                                 "title": {
                                                     "type": "string",
                                                     "example": "Product title"
                                                 },
-                                                "slug": {
+                                                "price": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": "1350.00"
+                                                },
+                                                "description": {
                                                     "type": "string",
-                                                    "example": "Product slug"
+                                                    "example": "Product description"
+                                                },
+                                                "metadata": {
+                                                    "properties": {
+                                                        "file": {
+                                                            "type": "string",
+                                                            "example": "d166d772-7c61-4e53-95f1-8e0a27748e3a"
+                                                        },
+                                                        "brand": {
+                                                            "type": "string",
+                                                            "example": "d166d772-7c61-4e53-95f1-8e0a27748e3a"
+                                                        }
+                                                    },
+                                                    "type": "object"
                                                 },
                                                 "created_at": {
                                                     "type": "string",
@@ -1309,34 +1411,51 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "product": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "uuid": {
+                                            "type": "string",
+                                            "example": "d166d772-7c61-4e53-95f1-8e0a27748e3a"
+                                        },
+                                        "category_uuid": {
+                                            "type": "string",
+                                            "example": "d166d772-7c61-4e53-95f1-gq31fds654fdg"
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "Product title"
+                                        },
+                                        "price": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": "1350.00"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Product description"
+                                        },
+                                        "metadata": {
                                             "properties": {
-                                                "id": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
-                                                "uuid": {
+                                                "file": {
                                                     "type": "string",
                                                     "example": "d166d772-7c61-4e53-95f1-8e0a27748e3a"
                                                 },
-                                                "title": {
+                                                "brand": {
                                                     "type": "string",
-                                                    "example": "Product title"
-                                                },
-                                                "slug": {
-                                                    "type": "string",
-                                                    "example": "Product slug"
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "example": "2024-07-09T03:11:38.000000Z"
-                                                },
-                                                "updated_at": {
-                                                    "type": "string",
-                                                    "example": "2024-07-09T03:11:38.000000Z"
+                                                    "example": "d166d772-7c61-4e53-95f1-8e0a27748e3a"
                                                 }
                                             },
                                             "type": "object"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "example": "2024-07-09T03:11:38.000000Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "example": "2024-07-09T03:11:38.000000Z"
                                         }
                                     },
                                     "type": "object"
@@ -1371,7 +1490,12 @@
                         "application/x-www-form-urlencoded": {
                             "schema": {
                                 "required": [
-                                    "title"
+                                    "title",
+                                    "category_uuid",
+                                    "price",
+                                    "description",
+                                    "image",
+                                    "brand"
                                 ],
                                 "properties": {
                                     "title": {
@@ -1379,10 +1503,31 @@
                                         "type": "string",
                                         "example": "Product title example"
                                     },
-                                    "slug": {
-                                        "description": "Product's slug",
+                                    "category_uuid": {
+                                        "description": "Product category",
                                         "type": "string",
-                                        "example": "Product slug example"
+                                        "example": "d166d772-7c61-4e53-95f1-8e0a27748e3a"
+                                    },
+                                    "price": {
+                                        "description": "Product price",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "12350.00"
+                                    },
+                                    "description": {
+                                        "description": "Product description",
+                                        "type": "string",
+                                        "example": "Product description example"
+                                    },
+                                    "image": {
+                                        "description": "Product image uuid",
+                                        "type": "string",
+                                        "example": "d166d772-7c61-dfs0-95f1-8e0a27748e3a"
+                                    },
+                                    "brand": {
+                                        "description": "Product brand uuid",
+                                        "type": "string",
+                                        "example": "d166d772-7c61-4e53-dsf9-8e0a27748e3a"
                                     }
                                 },
                                 "type": "object"
@@ -1411,21 +1556,43 @@
                                                     "type": "string",
                                                     "example": "d166d772-7c61-4e53-95f1-8e0a27748e3a"
                                                 },
+                                                "category_uuid": {
+                                                    "type": "string",
+                                                    "example": "d166d772-7c61-4e53-95f1-gq31fds654fdg"
+                                                },
                                                 "title": {
                                                     "type": "string",
                                                     "example": "Product title"
                                                 },
-                                                "slug": {
+                                                "price": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": "1350.00"
+                                                },
+                                                "description": {
                                                     "type": "string",
-                                                    "example": "Product slug"
+                                                    "example": "Product description"
+                                                },
+                                                "metadata": {
+                                                    "properties": {
+                                                        "file": {
+                                                            "type": "string",
+                                                            "example": "d166d772-7c61-4e53-95f1-8e0a27748e3a"
+                                                        },
+                                                        "brand": {
+                                                            "type": "string",
+                                                            "example": "d166d772-7c61-4e53-95f1-8e0a27748e3a"
+                                                        }
+                                                    },
+                                                    "type": "object"
                                                 },
                                                 "created_at": {
                                                     "type": "string",
-                                                    "example": "2024-07-08T03:11:38.000000Z"
+                                                    "example": "2024-07-09T03:11:38.000000Z"
                                                 },
                                                 "updated_at": {
                                                     "type": "string",
-                                                    "example": "2024-07-08T03:11:38.000000Z"
+                                                    "example": "2024-07-09T03:11:38.000000Z"
                                                 }
                                             },
                                             "type": "object"
