@@ -104,8 +104,8 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function tokens()
+    public function token()
     {
-        return $this->hasMany(JwtToken::class);
+        return $this->hasOne(JwtToken::class);
     }
 }

@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('jwt_tokens', function (Blueprint $table) {
             $table->id();
-            $table->uuid('unique_id')->unique();
-            $table->foreignId('user_id')->references('id')->on('users');
+            $table->uuid('uuid')->unique();
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('token_title');
             $table->json('restrictions')->nullable();
             $table->json('permissions')->nullable();
-            $table->timestamp('expired_at')->nullable();
+            $table->timestamp('expired_at');
             $table->timestamp('last_used_at')->nullable();
             $table->timestamp('refreshed_at')->nullable();
             $table->timestamps();

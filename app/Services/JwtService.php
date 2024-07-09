@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Models\User;
+use Auth;
+use Carbon\Carbon;
 use DateTimeImmutable;
-use Illuminate\Support\Facades\Auth;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
@@ -16,10 +17,11 @@ use Lcobucci\JWT\Validation\Constraint\IssuedBy;
 use Lcobucci\JWT\Validation\Constraint\PermittedFor;
 use Lcobucci\JWT\Validation\Constraint\RelatedTo;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
+use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 
 class JwtService
 {
-    protected $config;
+    protected Configuration $config;
 
     public function __construct()
     {
@@ -33,6 +35,9 @@ class JwtService
         );
     }
 
+    /**
+     * @param  non-empty-string  $claim
+     */
     public function generateToken(string $claim, mixed $value): string
     {
         $now = new DateTimeImmutable();
@@ -42,19 +47,27 @@ class JwtService
             ->relatedTo('user')
             ->identifiedBy(config('jwt.jwt_id'))
             ->issuedAt($now)
-            ->expiresAt($now->modify('+'.config('jwt.jwt_expiration').' minutes'))
+            ->expiresAt($now->modify('+' . config('jwt.jwt_expiration') . ' minutes'))
             ->withClaim($claim, $value)
             ->getToken($this->config->signer(), $this->config->signingKey());
 
         return $token->toString();
     }
 
+    /**
+     * @param  non-empty-string  $token
+     * @return string
+     */
     public function validateToken(string $token): bool
     {
         try {
             $parsedToken = $this->config->parser()->parse(
                 $token
             );
+            $user = Auth::user();
+            if (!$user) {
+                return false;
+            }
             $constraints = [
                 new SignedWith($this->config->signer(), $this->config->verificationKey()),
                 new IssuedBy(config('app.url')),
@@ -62,9 +75,13 @@ class JwtService
                 new IdentifiedBy(config('jwt.jwt_id')),
                 new RelatedTo('user'),
                 new HasClaim('uuid'),
-                // new HasClaimWithValue('uuid', Auth::user()->uuid)
+                new HasClaimWithValue('uuid', $user->uuid),
             ];
             $this->config->validator()->validate($parsedToken, ...$constraints);
+            $isTokenExpired = $user->token->expired_at < Carbon::now();
+            if ($isTokenExpired) {
+                return false;
+            }
 
             return true;
         } catch (RequiredConstraintsViolated $e) {
@@ -90,7 +107,5 @@ class JwtService
         } catch (\Exception $e) {
             return null;
         }
-
-        return null;
     }
 }
