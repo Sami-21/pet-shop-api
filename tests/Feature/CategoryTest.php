@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Brand;
+use App\Models\Category;
 use App\Models\User;
 use App\Services\JwtService;
 use Hash;
@@ -11,12 +11,12 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Str;
 use Tests\TestCase;
 
-class BrandTest extends TestCase
+class CategoryTest extends TestCase
 {
     use RefreshDatabase;
 
     protected User $user;
-    protected Brand $brand;
+    protected Category $category;
     protected JwtService $jwtService;
 
 
@@ -26,14 +26,14 @@ class BrandTest extends TestCase
         parent::setUp();
         $this->jwtService = $this->app->make(JwtService::class);
         $this->user = User::factory()->create(['email' => 'admin@buckhill.co.uk', 'password' => Hash::make('admin'), 'is_admin' => true]);
-        $this->brand = Brand::factory()->create();
+        $this->category = Category::factory()->create();
     }
 
 
-    public function test_get_brands(): void
+    public function test_get_categories(): void
     {
         $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->getJson('/api/v1/brands');
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->getJson('/api/v1/categories');
 
         $response->assertStatus(200)->assertJsonStructure([
             'current_page',
@@ -52,10 +52,10 @@ class BrandTest extends TestCase
         ]);
     }
 
-    public function test_get_brand(): void
+    public function test_get_category(): void
     {
         $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->getJson('/api/v1/brand/' . $this->brand->uuid);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->getJson('/api/v1/category/' . $this->category->uuid);
 
         $response->assertStatus(200)->assertJsonStructure([
             'id',
@@ -67,25 +67,25 @@ class BrandTest extends TestCase
         ]);
     }
 
-    public function test_get_brand_not_found(): void
+    public function test_get_category_not_found(): void
     {
         $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->getJson('/api/v1/brand/' . Str::uuid());
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->getJson('/api/v1/category/' . Str::uuid());
 
         $response->assertStatus(404);
     }
 
-    public function test_store_brand(): void
+    public function test_store_category(): void
     {
         $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->postJson('/api/v1/brand/create', [
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->postJson('/api/v1/category/create', [
             'title' => 'Test title',
             'slug' => 'Test slug'
         ]);
 
         $response->assertStatus(201)->assertJsonStructure([
             'message',
-            'brand' => [
+            'category' => [
                 'id',
                 'uuid',
                 'title',
@@ -94,15 +94,15 @@ class BrandTest extends TestCase
                 'updated_at'
             ]
         ]);
-        $this->assertDatabaseHas('brands', [
+        $this->assertDatabaseHas('categories', [
             'title' => 'Test title',
             'slug' => 'Test slug'
         ]);
     }
 
-    public function test_store_brand_unauthenticated(): void
+    public function test_store_category_unauthenticated(): void
     {
-        $response = $this->postJson('/api/v1/brand/create', [
+        $response = $this->postJson('/api/v1/category/create', [
             'title' => 'Test title',
             'slug' => 'Test slug'
         ]);
@@ -112,12 +112,12 @@ class BrandTest extends TestCase
         ]);
     }
 
-    public function test_store_brand_unauthorized(): void
+    public function test_store_category_unauthorized(): void
     {
         $user = User::factory()->create(['is_admin' => false]);
 
         $token = $this->jwtService->generateToken('uuid', $user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->postJson('/api/v1/brand/create', [
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->postJson('/api/v1/category/create', [
             'title' => 'Test title',
             'slug' => 'Test slug'
         ]);
@@ -127,17 +127,17 @@ class BrandTest extends TestCase
         ]);
     }
 
-    public function test_update_brand(): void
+    public function test_update_category(): void
     {
         $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->putJson('/api/v1/brand/' . $this->brand->uuid, [
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->putJson('/api/v1/category/' . $this->category->uuid, [
             'title' => 'Updated Test title',
             'slug' => 'Updated Test slug'
         ]);
 
         $response->assertStatus(200)->assertJsonStructure([
             'message',
-            'brand' => [
+            'category' => [
                 'id',
                 'uuid',
                 'title',
@@ -146,16 +146,16 @@ class BrandTest extends TestCase
                 'updated_at'
             ]
         ]);
-        $this->assertDatabaseHas('brands', [
+        $this->assertDatabaseHas('categories', [
             'title' => 'Updated Test title',
             'slug' => 'Updated Test slug'
         ]);
     }
 
-    public function test_update_brand_not_found(): void
+    public function test_update_category_not_found(): void
     {
         $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->putJson('/api/v1/brand/' . Str::uuid(), [
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->putJson('/api/v1/category/' . Str::uuid(), [
             'title' => 'Updated Test title',
             'slug' => 'Updated Test slug'
         ]);
@@ -163,9 +163,9 @@ class BrandTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_update_brand_unauthenticated(): void
+    public function test_update_category_unauthenticated(): void
     {
-        $response = $this->putJson('/api/v1/brand/' . $this->brand->uuid, [
+        $response = $this->putJson('/api/v1/category/' . $this->category->uuid, [
             'title' => 'Test title',
             'slug' => 'Test slug'
         ]);
@@ -175,12 +175,12 @@ class BrandTest extends TestCase
         ]);
     }
 
-    public function test_update_brand_unauthorized(): void
+    public function test_update_category_unauthorized(): void
     {
         $user = User::factory()->create(['is_admin' => false]);
 
         $token = $this->jwtService->generateToken('uuid', $user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->putJson('/api/v1/brand/' . $this->brand->uuid, [
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->putJson('/api/v1/category/' . $this->category->uuid, [
             'title' => 'Test title',
             'slug' => 'Test slug'
         ]);
@@ -190,43 +190,43 @@ class BrandTest extends TestCase
         ]);
     }
 
-    public function test_delete_brand(): void
+    public function test_delete_category(): void
     {
         $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->deleteJson('/api/v1/brand/' . $this->brand->uuid);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->deleteJson('/api/v1/category/' . $this->category->uuid);
 
         $response->assertStatus(200)->assertJsonStructure([
             'message',
         ]);
-        $this->assertDatabaseMissing('brands', [
+        $this->assertDatabaseMissing('categories', [
             'title' => 'Test title',
             'slug' => 'Test slug'
         ]);
     }
 
-    public function test_delete_brand_not_found(): void
+    public function test_delete_category_not_found(): void
     {
         $token = $this->jwtService->generateToken('uuid', $this->user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->deleteJson('/api/v1/brand/' . Str::uuid());
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->deleteJson('/api/v1/category/' . Str::uuid());
 
         $response->assertStatus(404);
     }
 
-    public function test_delete_brand_unauthenticated(): void
+    public function test_delete_category_unauthenticated(): void
     {
-        $response = $this->putJson('/api/v1/brand/' . $this->brand->uuid);
+        $response = $this->putJson('/api/v1/category/' . $this->category->uuid);
 
         $response->assertStatus(401)->assertJson([
             'error' => 'Unauthenticated'
         ]);
     }
 
-    public function test_delete_brand_unauthorized(): void
+    public function test_delete_category_unauthorized(): void
     {
         $user = User::factory()->create(['is_admin' => false]);
 
         $token = $this->jwtService->generateToken('uuid', $user->uuid);
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->putJson('/api/v1/brand/' . $this->brand->uuid);
+        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->putJson('/api/v1/category/' . $this->category->uuid);
 
         $response->assertStatus(403)->assertJson([
             'error' => 'Unauthorized'

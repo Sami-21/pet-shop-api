@@ -21,7 +21,7 @@ Route::prefix('/v1')->group(function () {
     });
 
     Route::get('/brands', [BrandController::class, 'index']);
-    Route::get('/brand/{uuid}', [BrandController::class, 'index']);
+    Route::get('/brand/{uuid}', [BrandController::class, 'show']);
     Route::controller(BrandController::class)->prefix('brand')->middleware(['auth.jwt', 'is.admin'])->group(function () {
         Route::post('/create', 'store');
         Route::put('/{uuid}', 'update');
@@ -29,7 +29,7 @@ Route::prefix('/v1')->group(function () {
     });
 
     Route::get('/categories', [CategoryController::class, 'index']);
-    Route::get('/category/{uuid}', [CategoryController::class, 'index']);
+    Route::get('/category/{uuid}', [CategoryController::class, 'show']);
     Route::controller(CategoryController::class)->prefix('category')->middleware(['auth.jwt', 'is.admin'])->group(function () {
         Route::post('/create', 'store');
         Route::put('/{uuid}', 'update');
