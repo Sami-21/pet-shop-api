@@ -37,22 +37,27 @@ If you are using windows you can download [XAMPP](https://www.apachefriends.org/
 ```bash
 git clone https://github.com/Sami-21/pet-shop-api.git
 ```
-\
+
 2. Enter project directory:
 ```bash
 cd pet-shop-api
 ```
-\
+
 3. Install dependencies:
 ```bash
-composer update 
 composer install 
 ```
+4. Copy .env.example to .env 
+```bash
+cp .env.example .env
+```
+fill database credentials in your .env file to link it with laravel application.
 
- 
- 
-\
-4. Generate private and public keys for asymmetric encryption with lcobucci/jwt , the command below with generate a private key within yout root directory: 
+5. Generate app key
+```bash
+php artisan key:generate
+```
+6. Generate private and public keys for asymmetric encryption with lcobucci/jwt , the command below with generate a private key within yout root directory: 
 ```bash 
 openssl genpkey -algorithm RSA -out private.key -pkeyopt rsa_keygen_bits:4096
 ```
@@ -70,26 +75,26 @@ mv public.key storage/keys/public.key
 ```
 
 #### ❗️ Important info
-Add those keys to your .gitignore file (you can exclude the public key).
+Add those keys to your .gitignore file (you can exclude the public key) if it not there already.
 \
 \
-5. Run your migrations and seeders :
+7. Run your migrations and seeders :
 ```bash
 php artisan migrate --seed
 ```
 \
-6. Finally run your project:
+8. Finally run your project:
 ```bash 
 php artisan serve
 ```
 \
-7. You can generate Swagger docs by running : 
+9. You can generate Swagger docs by running : 
 ```bash 
 php artisan l5-swagger:generate
 ```
 
 \
-8. You can also run tests  : 
+10. You can also run tests  : 
 ```bash 
 php artisan test
 ```
