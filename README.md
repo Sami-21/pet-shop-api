@@ -40,7 +40,7 @@ git clone https://github.com/Sami-21/pet-shop-api.git
 \
 2. Enter project directory:
 ```bash
-cd pet-shop-ui
+cd pet-shop-api
 ```
 \
 3. Install dependencies:
